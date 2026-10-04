@@ -1,63 +1,81 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // Oculta as barras do Android
+  await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  );
+
+  runApp(const MeuApp());
+}
+
+class MeuApp extends StatelessWidget {
+  const MeuApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      color: Colors.purpleAccent,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: Home(),
+      home: TelaInicial(),
     );
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class TelaInicial extends StatelessWidget {
+  const TelaInicial({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text("Todo list"),
-        leading: const Icon(Icons.menu),
+      backgroundColor: const Color(0xFF101010),
+      body: SizedBox.expand(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 65,
+              color: const Color(0xFF1769FF),
+              alignment: Alignment.center,
+              child: const Text(
+                'MEU APLICATIVO',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const Expanded(
+              child: Center(
+                child: Text(
+                  'Tela cheia!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              color: const Color(0xFF202020),
+              child: const Text(
+                'Feito com Flutter',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-
-      body: Center(child: _card()),
     );
   }
-}
-
-Widget _card() {
-  return Container(
-    width: double.infinity,
-    margin: EdgeInsets.all(10),
-    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
-    height: 200,
-    decoration: BoxDecoration(
-      color: Colors.blue,
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Row(
-      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.add, size: 50, color: Colors.black),
-        ),
-        Text(
-          "Adicionar amigo",
-          style: TextStyle(fontSize: 30, color: Colors.white),
-        ),
-      ],
-    ),
-  );
 }
