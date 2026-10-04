@@ -1,0 +1,551 @@
+
+import 'package:flutter/material.dart';
+
+class BotaoPersonalizado extends StatelessWidget {
+  // Parâmetros do botão
+  final String texto;
+  final Color cor;
+  final Color corTexto;
+  final IconData? icone;
+  final double tamanhoFonte;
+  final double largura;
+  final double altura;
+  final double raioBorda;
+  final VoidCallback onPressed;
+
+  const BotaoPersonalizado({
+    super.key,
+    required this.texto,
+    required this.onPressed,
+    this.cor = Colors.blue,
+    this.corTexto = Colors.white,
+    this.icone,
+    this.tamanhoFonte = 16,
+    this.largura = 200,
+    this.altura = 50,
+    this.raioBorda = 10,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: largura,
+      height: altura,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: cor,
+          foregroundColor: corTexto,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(raioBorda),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icone != null) ...[
+              Icon(icone),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Text(
+                texto,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: tamanhoFonte),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+import 'package:flutter/material.dart';
+import 'botao_personalizado.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    home: MinhaTela(),
+    debugShowCheckedModeBanner: false,
+  ));
+}
+
+class MinhaTela extends StatelessWidget {
+  const MinhaTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Meus Botões')),
+      body: Center(
+        child: BotaoPersonalizado(
+          texto: 'Salvar',
+          cor: Colors.green,
+          icone: Icons.save,
+          largura: 200,
+          altura: 55,
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Botão clicado!'),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
+import 'package:flutter/material.dart';
+
+// 1. BOTÃO PRIMÁRIO
+class BotaoPrimario extends StatelessWidget {
+  final String texto;
+  final VoidCallback onPressed;
+  final Color cor;
+  final double largura;
+  final double altura;
+  final bool carregando;
+
+  const BotaoPrimario({
+    super.key,
+    required this.texto,
+    required this.onPressed,
+    this.cor = Colors.blue,
+    this.largura = 200,
+    this.altura = 50,
+    this.carregando = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: largura,
+      height: altura,
+      child: ElevatedButton(
+        onPressed: carregando ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: cor,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: carregando
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Text(texto),
+      ),
+    );
+  }
+}
+
+// 2. BOTÃO CONTORNADO
+class BotaoContornado extends StatelessWidget {
+  final String texto;
+  final VoidCallback onPressed;
+  final Color cor;
+  final double raio;
+
+  const BotaoContornado({
+    super.key,
+    required this.texto,
+    required this.onPressed,
+    this.cor = Colors.blue,
+    this.raio = 10,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: cor,
+        side: BorderSide(color: cor),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(raio),
+        ),
+      ),
+      child: Text(texto),
+    );
+  }
+}
+
+// 3. BOTÃO ARREDONDADO
+class BotaoArredondado extends StatelessWidget {
+  final String texto;
+  final VoidCallback onPressed;
+  final Color cor;
+  final IconData? icone;
+
+  const BotaoArredondado({
+    super.key,
+    required this.texto,
+    required this.onPressed,
+    this.cor = Colors.green,
+    this.icone,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icone ?? Icons.check),
+      label: Text(texto),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: cor,
+        foregroundColor: Colors.white,
+        shape: const StadiumBorder(),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 14,
+        ),
+      ),
+    );
+  }
+}
+
+// 4. BOTÃO SOMENTE COM ÍCONE
+class BotaoIcone extends StatelessWidget {
+  final IconData icone;
+  final VoidCallback onPressed;
+  final Color cor;
+  final double tamanho;
+  final String? descricao;
+
+  const BotaoIcone({
+    super.key,
+    required this.icone,
+    required this.onPressed,
+    this.cor = Colors.blue,
+    this.tamanho = 24,
+    this.descricao,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: descricao,
+      onPressed: onPressed,
+      icon: Icon(icone),
+      color: cor,
+      iconSize: tamanho,
+    );
+  }
+}
+
+// 5. BOTÃO COM ÍCONE E TEXTO
+class BotaoComIcone extends StatelessWidget {
+  final String texto;
+  final IconData icone;
+  final VoidCallback onPressed;
+  final Color cor;
+  final double largura;
+
+  const BotaoComIcone({
+    super.key,
+    required this.texto,
+    required this.icone,
+    required this.onPressed,
+    this.cor = Colors.purple,
+    this.largura = 200,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: largura,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icone),
+        label: Text(texto),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: cor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.all(14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+import 'package:flutter/material.dart';
+import 'widgets/botoes.dart';
+
+void main() {
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: MinhaTela(),
+  ));
+}
+
+class MinhaTela extends StatelessWidget {
+  const MinhaTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Biblioteca de Botões')),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BotaoPrimario(
+                texto: 'Salvar',
+                cor: Colors.blue,
+                onPressed: () {},
+              ),
+
+              const SizedBox(height: 15),
+
+              BotaoContornado(
+                texto: 'Cancelar',
+                cor: Colors.orange,
+                onPressed: () {},
+              ),
+
+              const SizedBox(height: 15),
+
+              BotaoArredondado(
+                texto: 'Confirmar',
+                icone: Icons.check,
+                onPressed: () {},
+              ),
+
+              const SizedBox(height: 15),
+
+              BotaoIcone(
+                icone: Icons.delete,
+                cor: Colors.red,
+                descricao: 'Excluir',
+                onPressed: () {},
+              ),
+
+              const SizedBox(height: 15),
+
+              BotaoComIcone(
+                texto: 'Adicionar',
+                icone: Icons.add,
+                cor: Colors.purple,
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+import 'package:flutter/material.dart';
+
+class BotaoConfirmacao extends StatelessWidget {
+  // Texto e aparência do botão
+  final String texto;
+  final IconData? icone;
+  final Color corBotao;
+  final Color corTexto;
+  final double largura;
+  final double altura;
+  final double raioBorda;
+
+  // Conteúdo do AlertDialog
+  final String titulo;
+  final String mensagem;
+  final IconData? iconeAlerta;
+  final Color corIconeAlerta;
+
+  // Textos das ações
+  final String textoConfirmar;
+  final String textoCancelar;
+
+  // Aparência das ações
+  final Color? corConfirmar;
+  final Color? corCancelar;
+
+  // Comportamento
+  final VoidCallback onConfirmar;
+  final VoidCallback? onCancelar;
+
+  const BotaoConfirmacao({
+    super.key,
+    required this.texto,
+    required this.titulo,
+    required this.mensagem,
+    required this.onConfirmar,
+    this.icone,
+    this.corBotao = Colors.blue,
+    this.corTexto = Colors.white,
+    this.largura = 220,
+    this.altura = 50,
+    this.raioBorda = 12,
+    this.iconeAlerta = Icons.help_outline,
+    this.corIconeAlerta = Colors.orange,
+    this.textoConfirmar = 'Confirmar',
+    this.textoCancelar = 'Cancelar',
+    this.corConfirmar,
+    this.corCancelar,
+    this.onCancelar,
+  });
+
+  Future<void> _mostrarDialog(BuildContext context) async {
+    final bool? confirmou = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          icon: iconeAlerta != null
+              ? Icon(
+                  iconeAlerta,
+                  color: corIconeAlerta,
+                  size: 36,
+                )
+              : null,
+          title: Text(titulo),
+          content: Text(mensagem),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(
+                textoCancelar,
+                style: TextStyle(
+                  color: corCancelar,
+                ),
+              ),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: corConfirmar,
+              ),
+              child: Text(textoConfirmar),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (!context.mounted) return;
+
+    if (confirmou == true) {
+      onConfirmar();
+    } else {
+      onCancelar?.call();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: largura,
+      height: altura,
+      child: ElevatedButton(
+        onPressed: () => _mostrarDialog(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: corBotao,
+          foregroundColor: corTexto,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(raioBorda),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icone != null) ...[
+              Icon(icone),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Text(
+                texto,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+import 'package:flutter/material.dart';
+import 'widgets/botao_confirmacao.dart';
+
+void main() {
+  runApp(const MeuAplicativo());
+}
+
+class MeuAplicativo extends StatelessWidget {
+  const MeuAplicativo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
+        useMaterial3: true,
+      ),
+      home: const MinhaTela(),
+    );
+  }
+}
+
+class MinhaTela extends StatelessWidget {
+  const MinhaTela({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Botões de confirmação'),
+      ),
+      body: Center(
+        child: BotaoConfirmacao(
+          texto: 'Excluir registro',
+          titulo: 'Confirmar exclusão?',
+          mensagem:
+              'Tem certeza de que deseja excluir este registro? '
+              'Esta ação não poderá ser desfeita.',
+          icone: Icons.delete,
+          iconeAlerta: Icons.warning_amber_rounded,
+          corBotao: Colors.red,
+          corIconeAlerta: Colors.red,
+          corConfirmar: Colors.red,
+          textoConfirmar: 'Excluir',
+          textoCancelar: 'Voltar',
+          onConfirmar: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Exclusão confirmada!'),
+              ),
+            );
+          },
+          onCancelar: () {
+            debugPrint('Usuário cancelou a exclusão');
+          },
+        ),
+      ),
+    );
+  }
+}

@@ -10,13 +10,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      color: Colors.purpleAccent,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const Home(),
-    ); // MaterialApp
-  } // Widget
-} // MyApp
+      home: Home(),
+    );
+  }
+}
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -28,32 +29,35 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.blue,
         title: const Text("Todo list"),
         leading: const Icon(Icons.menu),
-      ), //AppBar
-    ); //Scaffold
+      ),
+
+      body: Center(child: _card()),
+    );
   }
-} //Home
+}
 
-Widget _todoItem(String nome, bool concluida) {
+Widget _card() {
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 4),
-    padding: EdgeInsets.all(12),
+    width: double.infinity,
+    margin: EdgeInsets.all(10),
+    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+    height: 200,
     decoration: BoxDecoration(
-      color: Colors.purple,
-      borderRadius: BorderRadiusGeometry.circular(5),
-      boxShadow: [BoxShadow(color: Colors.blueGrey, blurRadius: 4)],
-    ), //BoxDecoration
+      color: Colors.blue,
+      borderRadius: BorderRadius.circular(10),
+    ),
     child: Row(
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(
-          concluida ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: concluida ? Colors.red : Colors.grey,
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.add, size: 50, color: Colors.black),
         ),
-        const SizedBox(height: 10), //SizedBox
-        Expanded(
-
-          child: Text("Texto", style: TextStyle(decoration: concluida ? TextDecoration.lineThrough : null)),
-        ), //Expanded
-      ], //children
-    ), //Row
-  ); //Container
-} //Widget
+        Text(
+          "Adicionar amigo",
+          style: TextStyle(fontSize: 30, color: Colors.white),
+        ),
+      ],
+    ),
+  );
+}
