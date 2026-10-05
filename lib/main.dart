@@ -1,80 +1,120 @@
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() => runApp(const TarefaApp());
 
-  // Oculta as barras do Android
-  await SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.immersiveSticky,
-  );
-
-  runApp(const MeuApp());
-}
-
-class MeuApp extends StatelessWidget {
-  const MeuApp({super.key});
+class TarefaApp extends StatelessWidget {
+  const TarefaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TelaInicial(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+      ),
+      //themeMode: ThemeMode.system,
+
+      home: TelaTarefa(),
     );
   }
 }
 
-class TelaInicial extends StatelessWidget {
-  const TelaInicial({super.key});
+class TelaTarefa extends StatefulWidget {
+  const TelaTarefa({super.key});
+  @override
+  State<TelaTarefa> createState() => _TelaTarefaState();
+}
 
+class _TelaTarefaState extends State<TelaTarefa> {
+  final List<String> lista = [];
+  final controllerInout = TextEditingController();
+
+  void limpaInput() {
+    controllerInout.clear();
+  }
+
+  void alerta({required BuildContext context, required String message}) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Error")));
+  }
+
+  @override
+  void dispose() {
+    controllerInout.dispose();
+    super.dispose();
+  }
+
+  //const TelaTarefa({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      body: SizedBox.expand(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 65,
-              color: const Color(0xFF1769FF),
-              alignment: Alignment.center,
-              child: const Text(
-                'MEU APLICATIVO',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+      appBar: AppBar(title: const Text("Todo List V1")),
+      body: ListView.builder(
+        itemCount: lista.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(lista[index]),
+            leading: const Icon(Icons.check_box_outlined),
+            trailing: IconButton(
+              onPressed: () {
+                setState(() {
+                  lista.removeAt(index);
+                });
+              },
+              icon: Icon(Icons.delete),
             ),
-            const Expanded(
-              child: Center(
-                child: Text(
-                  'Tela cheia!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Alerta Input"),
+                content: TextField(
+                  controller: controllerInout,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: "Tarefa",
+                    hintText: "Add tarefa",
                   ),
                 ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              color: const Color(0xFF202020),
-              child: const Text(
-                'Feito com Flutter',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      controllerInout.clear();
+                    },
+                    child: const Text("Cancelar"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      final campo = controllerInout.text;
+                      if (campo.isNotEmpty) {
+                        setState(() {
+                          lista.add(campo);
+                        });
+                        limpaInput();
+                        Navigator.pop(context);
+                      }
+                      alerta(context: context, message: "Error");
+                    },
+                    child: const Text("Add"),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
