@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+import 'listas.dart';
+
+class MinhaPagina extends StatefulWidget {
+  const MinhaPagina({super.key});
+
+  @override
+  State<MinhaPagina> createState() => _MinhaPaginaState();
+}
+
+class _MinhaPaginaState extends State<MinhaPagina> {
+  final TextEditingController nomeController = TextEditingController();
+
+  List<String> lt = [];
+
+  void adicionarNome() {
+    final nome = nomeController.text.trim();
+
+    if (nome.isNotEmpty) {
+      setState(() {
+        lt.add(nome);
+      });
+
+      nomeController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Lista de nomes')),
+      body: Column(
+        children: [
+          TextField(
+            controller: nomeController,
+            decoration: const InputDecoration(
+              labelText: 'Digite um nome',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: adicionarNome,
+            child: const Text('Adicionar'),
+          ),
+          Expanded(
+            child: Listas(lt: lt),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    super.dispose();
+  }
+}
+
+List<String> lt = [];
+final nomeController = TextEditingController();
+
+void adicionarNome() {
+  if (nomeController.text.trim().isNotEmpty) {
+    setState(() {
+      lt.add(nomeController.text.trim());
+    });
+    nomeController.clear();
+  }
+}
+
+Widget listas() {
+  return ListView.builder(
+    itemCount: lt.length,
+    itemBuilder: (context, index) {
+      return Container(
+        margin: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: Colors.black),
+        ),
+        child: ListTile(
+          title: Text(lt[index]),
+        ),
+      );
+    },
+  );
+}

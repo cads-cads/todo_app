@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/app_cores.dart';
 
+// funcao principal a main
 void main() => runApp(const App());
 
 class App extends StatelessWidget {
@@ -9,102 +12,88 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TelaTarefa(),
+      title: "Exmpplos",
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+      ), //ThemeData
+      themeMode: ThemeMode.dark,
+      home: Home(),
     ); //MaterialApp
   }
 }
 
-class Tarefa {
-  String nome;
-  bool concluida;
+class Home extends StatelessWidget {
+  const Home({super.key});
 
-  Tarefa({required this.nome, this.concluida = false});
-}
-
-// => TelaTarefa
-class TelaTarefa extends StatefulWidget {
-  const TelaTarefa({super.key});
-
-  @override
-  State<TelaTarefa> createState() => _TelaTarefaState();
-}
-
-// => _TelaTarefaState
-class _TelaTarefaState extends State<TelaTarefa> {
   @override
   Widget build(BuildContext context) {
-    final controllerInut = TextEditingController();
-    final List<String> lista = [];
-    bool ok = false;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
-        title: const Text("Todo List"),
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        title: const Text("Exemplos"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share),
-          ), //IconButton
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.person),
-          ), //IconButton
-        ], //actions[]
+        backgroundColor: Colors.purple,
       ), //AppBar
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                icon: Icon(Icons.warning),
-                title: const Text("Alert"),
-                content: TextField(
-                  controller: controllerInut,
-                  autofocus: true,
-                  maxLength: 10,
-                  decoration: InputDecoration(
-                    hintText: "Tarefa",
-                    labelText: "nome",
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(),
-                  ), //InputDecoration
-                ), //TextField
-                actions: [], //actions[]
-              ); //AlertDialog
-            },
-          );
-        },
-        child: const Icon(Icons.add),
-      ), //FloatingActionButton
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.all(10),
+      body: Column(
+        children: [
+          pageApp(),
+
+          Container(
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 1),
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(5),
-            ), //BoxDecoration
-            child: ListTile(
-              leading: IconButton(
-                onPressed: () {
-                  setState(() {
-                    ok = !ok;
-                  });
-                },
-                icon: Icon(ok ? Icons.check_box_outlined : Icons.person),
+              color: Colors.red,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: "https://site.com/foto.jpg",
+              width: 200,
+              height: 150,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => const SizedBox(
+                width: 200,
+                height: 150,
+                child: Center(child: CircularProgressIndicator()),
               ),
-              title: Text(index.toString()),
-            ), //ListTile
-          ); //Container
-        },
-      ), //ListView
+              errorWidget: (context, url, error) => const SizedBox(
+                width: 200,
+                height: 150,
+                child: Center(child: Icon(Icons.error, size: 40)),
+              ),
+            ),
+          ),
+        ],
+      ),
     ); //Scaffold
   }
+}
+
+Widget pageApp() {
+  return SizedBox(
+    width: double.infinity,
+    height: 200,
+
+    child: Card(
+      margin: EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      color: Colors.blue,
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(10),
+
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Ola mundo"),
+            const Text("Ola mundo"),
+            const Text("Ola mundo"),
+          ],
+        ), //Column
+      ), //Padding
+    ), //Card
+  ); //SizeBox
 }

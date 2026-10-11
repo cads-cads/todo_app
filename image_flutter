@@ -1,0 +1,101 @@
+CachedNetworkImage(
+  imageUrl: "https://site.com/foto.jpg",
+  width: 200,
+  height: 150,
+  fit: BoxFit.cover,
+  memCacheWidth: 400,
+  memCacheHeight: 300,
+  placeholder: (context, url) => const SizedBox(
+    width: 200,
+    height: 150,
+  ),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
+)
+
+ListView.builder(
+  itemCount: images.length,
+  itemBuilder: (context, index) {
+    return CachedNetworkImage(
+      imageUrl: images[index],
+      width: 200,
+      height: 150,
+      fit: BoxFit.cover,
+      memCacheWidth: 400,
+      placeholder: (_, __) =>
+          const SizedBox(width: 200, height: 150),
+    );
+  },
+)
+
+CachedNetworkImage(
+  imageUrl: "https://site.com/foto.jpg",
+  width: 200,
+  height: 150,
+  fit: BoxFit.cover,
+  memCacheWidth: 400,
+  memCacheHeight: 300,
+  placeholder: (context, url) => const SizedBox(
+    width: 200,
+    height: 150,
+  ),
+  errorWidget: (context, url, error) => const Icon(Icons.error),
+)
+
+AspectRatio(
+  aspectRatio: 16 / 9,
+  child: CachedNetworkImage(
+    imageUrl: "https://site.com/foto.jpg",
+    fit: BoxFit.cover,
+  ),
+)
+
+CachedNetworkImage(
+  imageUrl: "https://site.com/foto.jpg",
+  width: 200,
+  height: 150,
+  fit: BoxFit.cover,
+  placeholder: (context, url) =>
+      const Center(child: CircularProgressIndicator()),
+  errorWidget: (context, url, error) =>
+      const Icon(Icons.error),
+)
+
+ClipRRect(
+  borderRadius: BorderRadius.circular(12),
+  child: Image.network(
+    "https://site.com/foto.jpg",
+    width: 200,
+    height: 150,
+    fit: BoxFit.cover,
+  ),
+)
+
+Container(
+  width: 200,
+  height: 150,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(
+      color: Colors.grey,
+      width: 1,
+    ),
+  ),
+  clipBehavior: Clip.antiAlias,
+  child: Image.network(
+    "https://site.com/foto.jpg",
+    fit: BoxFit.cover,
+  ),
+)
+
+
+ClipRRect(
+  borderRadius: BorderRadius.circular(12),
+  child: Image.network(
+    'https://picsum.photos/400/300',
+    width: 200,
+    height: 150,
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) =>
+        const Icon(Icons.error),
+  ),
+)

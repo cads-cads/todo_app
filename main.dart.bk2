@@ -1,0 +1,168 @@
+import 'package:flutter/material.dart';
+import 'package:todo_app/app_cores.dart';
+
+// funcao principal a main
+void main() => runApp(const App());
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.black,
+          brightness: Brightness.dark,
+        ),
+      ), //ThemeDataov
+      themeMode: ThemeMode.system,
+      home: TelaTarefa(),
+    ); //MaterialApp
+  }
+}
+
+class TelaTarefa extends StatefulWidget {
+  const TelaTarefa({super.key});
+
+  @override
+  State<TelaTarefa> createState() => _TelaTarefaState();
+}
+
+class _TelaTarefaState extends State<TelaTarefa> {
+  List<String> lista = [];
+  final controllerInput = TextEditingController();
+  bool ok = true;
+  void mostraDialog({
+    required TextEditingController input,
+    required BuildContext context,
+    required String message,
+    required List<String> lt,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(ok ? message : "kkkk"),
+          content: TextField(
+            controller: input,
+            autofocus: true,
+            decoration: InputDecoration(
+              hintText: "Add tarefa",
+              labelText: "Nome",
+
+              prefixIcon: const Icon(Icons.person),
+              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(), //OutlineInputBorder
+            ), //InputDecoration
+          ), //TextField
+          actions: [
+            TextButton(
+              onPressed: () {
+                final nome = input.text;
+                if (!nome.isEmpty) {
+                  setState(() {
+                    lt.add(nome);
+                    Navigator.pop(context);
+                    return;
+                  });
+                }
+                ok = false;
+              },
+              child: const Text("Adicionar"),
+            ), //TextButton
+          ], //actions
+        ); //AlertDialog
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    controllerInput.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Todo List"),
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey,
+      ), //AppBar
+      body: Container(
+        margin: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            TextField(
+              controller: controllerInput,
+
+              decoration: InputDecoration(
+                // hintText: "Nome",
+
+                labelText: "Add",
+                labelStyle: TextStyle(color: Colors.blue),
+                
+                filled: true,
+                fillColor: Colors.blue,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: Icon(Icons.person),
+              ), //InputDecoration
+            ), //TextField
+            SizedBox(height: 10),
+
+            TextButton(
+              onPressed: () {
+                final nome = controllerInput.text;
+                if (nome.isNotEmpty) {
+                  setState(() {
+                    lista.add(nome);
+                  });
+                }
+              },
+              child: Text("Adicionwr"),
+            ), //TextButton
+            Expanded(
+              child: listas(context: context, lt: lista),
+            ),
+          ],
+        ), //Colimn
+      ), //Container
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          mostraDialog(
+            context: context,
+            message: ok ? "Erro" : "legal",
+            input: controllerInput,
+            lt: lista,
+          );
+        },
+
+        child: const Icon(Icons.add),
+      ), //FloatingActionButton
+    ); //Scaffold
+  }
+}
+
+Widget listas({required BuildContext context, required List<String> lt}) {
+  return ListView.builder(
+    itemCount: lt.length,
+    itemBuilder: (context, index) {
+      return Container(
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(5),
+          border: BoxBorder.all(color: Colors.black, width: 2), //BoxBorder
+        ), //BoxDecoratio
+        child: ListTile(title: Text(lt[index])), //ListTile
+      ); //Container
+    },
+  ); //ListView
+}
