@@ -49,7 +49,7 @@ class Home extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: CachedNetworkImage(
-              imageUrl: "https://site.com/foto.jpg",
+              imageUrl: 'https://picsum.photos/400/300',
               width: 200,
               height: 150,
               fit: BoxFit.cover,
